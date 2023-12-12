@@ -6,6 +6,7 @@ import com.luckycatlabs.sunrisesunset.dto.Location
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.stream.Collectors
 
 
 class CalculateSunPinnedTime {
@@ -15,8 +16,9 @@ class CalculateSunPinnedTime {
     static void main(String [] args) {
         def calendar = Calendar.getInstance(TimeZone.getDefault())
         def result = calculatePinnedTime(calendar)
-
-        print result
+        def zones = TimeZone.getAvailableIDs().findAll {it-> it.contains("Europe")}
+        def results = zones.stream().map {[it,calculatePinnedTime(Calendar.getInstance(TimeZone.getTimeZone(it)))]}.collect(Collectors.toList())
+        print results.toString()
     }
 
     static def calculatePinnedTime(Instant instant, ZoneId zone) {
